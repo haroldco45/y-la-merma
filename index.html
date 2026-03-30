@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Y dónde está la merma? - Chef Mauricio Marín</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; color: #333; }
+        .card { border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .header-chef { background-color: #2c3e50; color: white; padding: 20px; border-radius: 0 0 20px 20px; }
+        .btn-primary { background-color: #e67e22; border: none; }
+        .btn-primary:hover { background-color: #d35400; }
+        footer { margin-top: 50px; padding: 20px; font-size: 0.9em; color: #7f8c8d; }
+    </style>
+</head>
+<body>
+
+    <div class="header-chef text-center mb-4">
+        <h1>¿Y dónde está la merma?</h1>
+        <p class="lead">Control de Procesos - Chef Mauricio Marín (Especialista en Ahumados)</p>
+    </div>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                
+                <div class="card mb-4">
+                    <div class="card-header bg-dark text-white">
+                        <h5 class="mb-0">1. Recepción de Materia Prima</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Producto (Ej: Costilla de Cerdo)</label>
+                                <input type="text" id="producto" class="form-control" placeholder="Nombre del corte">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Peso Bruto Inicial (Kg)</label>
+                                <input type="number" id="pesoBruto" class="form-control" value="10" step="0.01">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4 border-warning">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="mb-0">2. Proceso de Limpieza (Trimado)</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted small">Registre el peso de los desperdicios retirados de la muestra.</p>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Gordo (Kg)</label>
+                                <input type="number" id="pesoGordo" class="form-control" placeholder="0.00" step="0.01">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Cebo / Tejido (Kg)</label>
+                                <input type="number" id="pesoCebo" class="form-control" placeholder="0.00" step="0.01">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button class="btn btn-primary btn-lg" onclick="calcularMermaInicial()">Calcular Disponibilidad Neta</button>
+                </div>
+
+                <div id="resultadoBusqueda" class="mt-4 p-3 bg-white border rounded d-none">
+                    <h4>Resumen de Limpieza:</h4>
+                    <hr>
+                    <p id="detalleMateria"></p>
+                    <p class="h5 text-success" id="pesoNetoFinal"></p>
+                    <p class="text-danger" id="porcentajeMerma"></p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-center">
+        <p>App desarrollada por <strong>Vibras Positivas</strong> - Derecho de autor (3117700431)</p>
+    </footer>
+
+    <script>
+        function calcularMermaInicial() {
+            // Obtener valores
+            const bruto = parseFloat(document.getElementById('pesoBruto').value) || 0;
+            const gordo = parseFloat(document.getElementById('pesoGordo').value) || 0;
+            const cebo = parseFloat(document.getElementById('pesoCebo').value) || 0;
+            const producto = document.getElementById('producto').value || "Muestra";
+
+            // Cálculos
+            const totalMermas = gordo + cebo;
+            const pesoNeto = bruto - totalMermas;
+            const porcentaje = (totalMermas / bruto) * 100;
+
+            // Mostrar resultados
+            const divResultado = document.getElementById('resultadoBusqueda');
+            divResultado.classList.remove('d-none');
+
+            document.getElementById('detalleMateria').innerHTML = `
+                <strong>Producto:</strong> ${producto}<br>
+                <strong>Merma Total (Limpieza):</strong> ${totalMermas.toFixed(2)} Kg
+            `;
+            
+            document.getElementById('pesoNetoFinal').innerText = `Peso Neto para Ahumar: ${pesoNeto.toFixed(2)} Kg`;
+            document.getElementById('porcentajeMerma').innerText = `Pérdida por limpieza: ${porcentaje.toFixed(2)}%`;
+        }
+    </script>
+</body>
+</html>
